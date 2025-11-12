@@ -6,6 +6,8 @@ import { ArcRotateCamera } from "@babylonjs/core/Cameras/arcRotateCamera";
 import { Engine } from "@babylonjs/core/Engines/engine";
 import { MeshBuilder } from "@babylonjs/core/Meshes/meshBuilder";
 import "@babylonjs/core/Meshes/meshBuilder";
+import "@babylonjs/core/Materials/standardMaterial";
+import "@babylonjs/core/Culling/ray";
 
 
 export function createScene(engine: Engine, canvas: HTMLCanvasElement) {
