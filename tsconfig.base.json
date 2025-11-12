@@ -1,0 +1,12 @@
+{
+  "extends": "@tsconfig/strictest/tsconfig.json",
+  "compilerOptions": {
+    "target": "ESNext",
+    "module": "ESNext",
+    "composite": true,
+    "skipLibCheck": true,
+    "declaration": true,
+    "sourceMap": true,
+    "declarationMap": true
+  }
+}

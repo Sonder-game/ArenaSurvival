@@ -1,0 +1,19 @@
+{
+  "name": "@hero-survival/server",
+  "version": "1.0.0",
+  "type": "module",
+  "scripts": {
+    "build": "vite build",
+    "start": "node dist/server.js"
+  },
+  "dependencies": {
+    "@hero-survival/shared": "workspace:*",
+    "ws": "8.18.3"
+  },
+  "devDependencies": {
+    "@types/ws": "8.5.11",
+    "typescript": "5.5.3",
+    "vite": "^5.3.4",
+    "tsx": "^4.16.2"
+  }
+}

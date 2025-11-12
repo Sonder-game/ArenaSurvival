@@ -1,0 +1,16 @@
+{
+  "name": "hero-survival",
+  "private": true,
+  "workspaces": [
+    "packages/*"
+  ],
+  "scripts": {
+    "dev": "npm run build -w @hero-survival/server && (npm run dev -w @hero-survival/client & npm run start -w @hero-survival/server)",
+    "build": "npm run build -ws"
+  },
+  "devDependencies": {
+    "typescript": "5.5.3",
+    "tsx": "^4.16.2",
+    "@tsconfig/strictest": "^2.0.5"
+  }
+}
