@@ -8,7 +8,7 @@ import '@babylonjs/core/Meshes/meshBuilder';
 import '@babylonjs/core/Materials/standardMaterial';
 import { addEntity } from '@skyboxgg/bjs-ecs';
 
-import { WebSocketClient } from './network/WebSocketClient';
+// import { WebSocketClient } from './network/WebSocketClient';
 import {
     MovementSystem,
     CollisionSystem,
@@ -21,7 +21,7 @@ import { CollidableComponent } from './ecs/components';
 export class Game {
     private engine: Engine;
     private scene: Scene;
-    private wsClient: WebSocketClient;
+    // private wsClient: WebSocketClient;
     private player: TransformNode | null = null;
 
     constructor(canvas: HTMLCanvasElement) {
@@ -51,7 +51,7 @@ export class Game {
         // Инициализируем систему ввода
         createPlayerInputSystem(this.scene, () => this.player);
 
-        this.wsClient = new WebSocketClient('ws://localhost:8080');
+        // this.wsClient = new WebSocketClient('ws://localhost:8080');
         
         this.engine.runRenderLoop(() => {
             const deltaTime = this.engine.getDeltaTime() / 1000.0;
