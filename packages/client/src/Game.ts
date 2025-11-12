@@ -44,7 +44,7 @@ export class Game {
         this.player = playerSphere;
         this.world.createEntity(
             this.player,
-            CollidableComponent.create('player', 0.5)
+            CollidableComponent('player', 0.5)
         );
 
         // Создаем врага

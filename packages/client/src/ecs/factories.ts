@@ -21,9 +21,9 @@ export const createEnemy = (position: Vector3, world: World) => {
 
     world.createEntity(
         enemy,
-        HealthComponent.create(100, 100),
-        CollidableComponent.create('enemy', 0.5),
-        EnemyComponent.create()
+        HealthComponent(100, 100),
+        CollidableComponent('enemy', 0.5),
+        EnemyComponent()
     );
 
     return enemy;
@@ -41,10 +41,10 @@ export const createProjectile = (position: Vector3, direction: Vector3, world: W
 
     world.createEntity(
         projectile,
-        DamageComponent.create(10),
-        VelocityComponent.create(direction, 50), // Speed of 50
-        CollidableComponent.create('projectile', 0.1),
-        ProjectileComponent.create()
+        DamageComponent(10),
+        VelocityComponent(direction, 50), // Speed of 50
+        CollidableComponent('projectile', 0.1),
+        ProjectileComponent()
     );
 
     return projectile;
