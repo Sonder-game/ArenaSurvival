@@ -22,21 +22,21 @@ export const RotationSystem = (deltaTime: number) => {
 };
 
 type MovableEntity = TransformNode & {
-    velocity: ReturnType<typeof VelocityComponent>;
+    velocity: ReturnType<typeof VelocityComponent.create>;
 };
 
 type HealthEntity = TransformNode & {
-    health: ReturnType<typeof HealthComponent>;
+    health: ReturnType<typeof HealthComponent.create>;
 };
 
 type ProjectileEntity = TransformNode & {
-    collidable: ReturnType<typeof CollidableComponent>;
-    damage: ReturnType<typeof DamageComponent>;
+    collidable: ReturnType<typeof CollidableComponent.create>;
+    damage: ReturnType<typeof DamageComponent.create>;
 };
 
 type EnemyEntity = TransformNode & {
-    collidable: ReturnType<typeof CollidableComponent>;
-    health: ReturnType<typeof HealthComponent>;
+    collidable: ReturnType<typeof CollidableComponent.create>;
+    health: ReturnType<typeof HealthComponent.create>;
 };
 
 export const MovementSystem = (deltaTime: number) => {
