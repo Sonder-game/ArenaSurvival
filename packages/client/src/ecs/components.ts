@@ -1,3 +1,3 @@
 import { createComponent } from '@skyboxgg/bjs-ecs';
 
-export const Rotator = createComponent<{ speed: number }>();
+export const Rotator = createComponent('rotator', (speed: number) => ({ speed }));

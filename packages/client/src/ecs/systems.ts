@@ -1,19 +1,20 @@
-import { createSystem, queryEntities, IWorld } from '@skyboxgg/bjs-ecs';
+import { queryEntities } from '@skyboxgg/bjs-ecs';
 import { TransformNode } from '@babylonjs/core/Meshes/transformNode';
 import { Rotator } from './components';
 
-export const RotationSystem = createSystem(
-    (world: IWorld) => {
-        const entities = queryEntities(world, [TransformNode, Rotator]);
+// Для надежности мы можем определить тип нашей сущности
+type RotatableEntity = TransformNode & {
+    rotator: { speed: number };
+};
 
-        return (deltaTime: number) => {
-            for (const entity of entities) {
-                const transform = entity.get(TransformNode);
-                const rotator = entity.get(Rotator);
-                if (transform && rotator) {
-                    transform.rotation.y += rotator.speed * deltaTime;
-                }
-            }
-        };
+export const RotationSystem = (deltaTime: number) => {
+    // Запрос остается прежним, но теперь мы знаем, что он вернет
+    const entities = queryEntities([TransformNode, Rotator]) as RotatableEntity[];
+
+    // ГЛАВНОЕ ИЗМЕНЕНИЕ:
+    // У сущности нет метода .get(). Компоненты - это свойства.
+    // Сама сущность - это и есть TransformNode, а данные 'rotator' добавлены к ней.
+    for (const entity of entities) {
+        entity.rotation.y += entity.rotator.speed * deltaTime;
     }
-);
+};
