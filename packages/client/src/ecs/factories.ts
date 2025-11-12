@@ -22,7 +22,7 @@ export const createEnemy = (position: Vector3, scene: Scene) => {
         enemy,
         HealthComponent(100, 100),
         CollidableComponent('enemy', 0.5),
-        EnemyComponent()
+        EnemyComponent
     ]);
 
     return enemy;
@@ -42,7 +42,7 @@ export const createProjectile = (position: Vector3, direction: Vector3, scene: S
         DamageComponent(10),
         VelocityComponent(direction, 50),
         CollidableComponent('projectile', 0.1),
-        ProjectileComponent()
+        ProjectileComponent
     ]);
 
     return projectile;
