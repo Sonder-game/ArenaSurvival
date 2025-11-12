@@ -1,4 +1,4 @@
-import { queryEntities, World } from '@skyboxgg/bjs-ecs';
+import { queryEntities } from '@skyboxgg/bjs-ecs';
 import { Scene, TransformNode, Vector3, PointerEventTypes } from '@babylonjs/core';
 import {
     Rotator,
@@ -22,21 +22,21 @@ export const RotationSystem = (deltaTime: number) => {
 };
 
 type MovableEntity = TransformNode & {
-    velocity: ReturnType<typeof VelocityComponent['create']>;
+    velocity: ReturnType<typeof VelocityComponent>;
 };
 
 type HealthEntity = TransformNode & {
-    health: ReturnType<typeof HealthComponent['create']>;
+    health: ReturnType<typeof HealthComponent>;
 };
 
 type ProjectileEntity = TransformNode & {
-    collidable: ReturnType<typeof CollidableComponent['create']>;
-    damage: ReturnType<typeof DamageComponent['create']>;
+    collidable: ReturnType<typeof CollidableComponent>;
+    damage: ReturnType<typeof DamageComponent>;
 };
 
 type EnemyEntity = TransformNode & {
-    collidable: ReturnType<typeof CollidableComponent['create']>;
-    health: ReturnType<typeof HealthComponent['create']>;
+    collidable: ReturnType<typeof CollidableComponent>;
+    health: ReturnType<typeof HealthComponent>;
 };
 
 export const MovementSystem = (deltaTime: number) => {
@@ -77,7 +77,7 @@ export const DeathSystem = () => {
     }
 };
 
-export const createPlayerInputSystem = (scene: Scene, world: World, getPlayer: () => TransformNode | null) => {
+export const createPlayerInputSystem = (scene: Scene, getPlayer: () => TransformNode | null) => {
     scene.onPointerObservable.add((pointerInfo) => {
         if (pointerInfo.type === PointerEventTypes.POINTERDOWN) {
             const player = getPlayer();
@@ -90,7 +90,7 @@ export const createPlayerInputSystem = (scene: Scene, world: World, getPlayer: (
                 const direction = targetPoint.subtract(player.position).normalize();
 
                 const spawnPos = player.position.clone().add(direction.scale(1.5));
-                createProjectile(spawnPos, direction, world);
+                createProjectile(spawnPos, direction, scene);
             }
         }
     });
