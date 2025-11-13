@@ -25,6 +25,7 @@ export class Game {
         this.engine = new Engine(canvas, true);
         this.scene = new Scene(this.engine);
         this.wsClient = new WebSocketClient('ws://localhost:8080');
+        console.log('Game client started.');
 
         this.setupCamera(canvas);
         this.setupLight();
@@ -32,10 +33,12 @@ export class Game {
         this.handleInput();
 
         this.wsClient.onGameStateUpdate = (gameState) => {
+            console.log('Received game state:', gameState);
             this.updateGameState(gameState);
         };
         
         this.wsClient.onPlayerConnect = (playerId) => {
+            console.log('Player connected with ID:', playerId);
             this.myPlayerId = playerId;
         };
 
@@ -52,15 +55,18 @@ export class Game {
         const camera = new FreeCamera('camera1', new Vector3(0, 50, -50), this.scene);
         camera.setTarget(Vector3.Zero());
         camera.attachControl(canvas, true);
+        console.log('Camera setup complete.');
     }
 
     private setupLight(): void {
         new HemisphericLight('light1', new Vector3(0, 1, 0), this.scene);
+        console.log('Light setup complete.');
     }
 
     private createGround(): void {
         const ground = MeshBuilder.CreateGround('ground', { width: 100, height: 100 }, this.scene);
         ground.material = new GridMaterial('groundMaterial', this.scene);
+        console.log('Ground created.');
     }
 
     private handleInput(): void {
@@ -134,6 +140,10 @@ export class Game {
             if (!playerMesh) {
                 playerMesh = MeshBuilder.CreateSphere(`player_${playerState.id}`, { diameter: 2 }, this.scene);
                 this.players.set(playerState.id, playerMesh);
+
+                if (playerState.id === this.myPlayerId) {
+                    this.scene.activeCamera!.parent = playerMesh;
+                }
             }
             playerMesh.position.x = playerState.position.x / 10;
             playerMesh.position.z = playerState.position.y / 10;
@@ -147,11 +157,6 @@ export class Game {
             }
             enemyMesh.position.x = enemyState.position.x / 10;
             enemyMesh.position.z = enemyState.position.y / 10;
-        }
-
-        const myPlayer = this.players.get(this.myPlayerId!);
-        if (myPlayer) {
-            this.scene.activeCamera!.parent = myPlayer;
         }
     }
 }
