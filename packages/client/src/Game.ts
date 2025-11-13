@@ -4,9 +4,10 @@ import { Vector3 } from '@babylonjs/core/Maths/math.vector';
 import { FreeCamera } from '@babylonjs/core/Cameras/freeCamera';
 import { HemisphericLight } from '@babylonjs/core/Lights/hemisphericLight';
 import { MeshBuilder } from '@babylonjs/core/Meshes/meshBuilder';
-import { GridMaterial } from '@babylonjs/materials/grid';
+import '@babylonjs/materials/grid';
 import { Mesh } from '@babylonjs/core/Meshes/mesh';
 import type { GameState, Vector2 } from '@hero-survival/shared';
+import { GridMaterial } from '@babylonjs/materials';
 
 import { WebSocketClient } from './network/WebSocketClient';
 
