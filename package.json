@@ -5,8 +5,8 @@
     "packages/*"
   ],
   "scripts": {
-    "dev": "npm run build -w @hero-survival/server && (npm run dev -w @hero-survival/client & npm run start -w @hero-survival/server)",
-    "build": "npm run build -ws"
+    "dev": "pnpm --parallel dev",
+    "build": "pnpm --parallel build"
   },
   "devDependencies": {
     "typescript": "5.5.3",
