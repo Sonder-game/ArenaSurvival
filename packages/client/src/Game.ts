@@ -3,43 +3,64 @@ import { Scene } from '@babylonjs/core/scene';
 import { Vector3 } from '@babylonjs/core/Maths/math.vector';
 import { FreeCamera } from '@babylonjs/core/Cameras/freeCamera';
 import { HemisphericLight } from '@babylonjs/core/Lights/hemisphericLight';
-import { MeshBuilder } from '@babylonjs/core/Meshes/meshBuilder';
+import { MeshBuilder, TransformNode } from '@babylonjs/core';
 import '@babylonjs/core/Meshes/meshBuilder';
 import '@babylonjs/core/Materials/standardMaterial';
 import { addEntity } from '@skyboxgg/bjs-ecs';
 
-import { WebSocketClient } from './network/WebSocketClient';
-import { Rotator } from './ecs/components';
-import { RotationSystem } from './ecs/systems';
+// import { WebSocketClient } from './network/WebSocketClient';
+import {
+    MovementSystem,
+    CollisionSystem,
+    DeathSystem,
+    createPlayerInputSystem
+} from './ecs/systems';
+import { createEnemy } from './ecs/factories';
+import { CollidableComponent } from './ecs/components';
 
 export class Game {
     private engine: Engine;
     private scene: Scene;
-    private wsClient: WebSocketClient;
+    // private wsClient: WebSocketClient;
+    private player: TransformNode | null = null;
 
     constructor(canvas: HTMLCanvasElement) {
         this.engine = new Engine(canvas, true);
         this.scene = new Scene(this.engine);
-        
-        const camera = new FreeCamera('camera1', new Vector3(0, 5, -10), this.scene);
+
+        const camera = new FreeCamera('camera1', new Vector3(0, 10, -20), this.scene);
         camera.setTarget(Vector3.Zero());
         camera.attachControl(canvas, true);
         new HemisphericLight('light1', new Vector3(0, 1, 0), this.scene);
         
-        const box = MeshBuilder.CreateBox('box', { size: 2 }, this.scene);
-        
-        // Сущность создается передачей массива компонентов:
-        // сам объект BabylonJS (box) и данные нашего компонента (Rotator).
+        // Создаем землю
+        MeshBuilder.CreateGround("ground", {width: 50, height: 50}, this.scene);
+
+        // Создаем игрока
+        const playerSphere = MeshBuilder.CreateSphere('player', { diameter: 1 }, this.scene);
+        playerSphere.position.y = 0.5;
+        this.player = playerSphere;
         addEntity([
-            box,
-            Rotator(0.5) 
+            this.player,
+            CollidableComponent('player', 0.5)
         ]);
 
-        this.wsClient = new WebSocketClient('ws://localhost:8080');
+        // Создаем врага
+        createEnemy(new Vector3(5, 0.5, 5), this.scene);
+
+        // Инициализируем систему ввода
+        createPlayerInputSystem(this.scene, () => this.player);
+
+        // this.wsClient = new WebSocketClient('ws://localhost:8080');
         
         this.engine.runRenderLoop(() => {
             const deltaTime = this.engine.getDeltaTime() / 1000.0;
-            RotationSystem(deltaTime);
+
+            // Вызываем системы в правильном порядке
+            MovementSystem(deltaTime);
+            CollisionSystem();
+            DeathSystem();
+
             this.scene.render();
         });
 
