@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "@babylonjs/core": "7.20.0",
+    "@babylonjs/materials": "7.20.0",
     "@skyboxgg/bjs-ecs": "0.4.1",
     "@hero-survival/shared": "1.0.0"
   },

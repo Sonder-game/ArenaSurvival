@@ -1,25 +1,34 @@
-import type { ClientMessage, ServerMessage } from '@hero-survival/shared';
+import type {
+    ServerMessage,
+    PlayerInputMessage,
+    Vector2,
+    GameState,
+} from '@hero-survival/shared';
 
 export class WebSocketClient {
     private socket: WebSocket;
+    public onGameStateUpdate?: (gameState: GameState) => void;
+    public onPlayerConnect?: (playerId: string) => void;
 
     constructor(url: string) {
         this.socket = new WebSocket(url);
 
         this.socket.onopen = () => {
             console.log('WebSocket connection established');
-            const message: ClientMessage = {
-                type: 'ping',
-                payload: 'Hello from client!',
-            };
-            this.sendMessage(message);
         };
 
         this.socket.onmessage = (event) => {
             try {
                 const message: ServerMessage = JSON.parse(event.data);
-                if (message.type === 'pong') {
-                    console.log('Received pong:', message.payload);
+
+                if (message.type === 'gameStateUpdate') {
+                    if (this.onGameStateUpdate) {
+                        this.onGameStateUpdate(message.payload);
+                    }
+                } else if (message.type === 'playerConnect') {
+                    if (this.onPlayerConnect) {
+                        this.onPlayerConnect(message.payload.playerId);
+                    }
                 }
             } catch (error) {
                 console.error('Error parsing server message:', error);
@@ -35,11 +44,13 @@ export class WebSocketClient {
         };
     }
 
-    public sendMessage(message: ClientMessage) {
+    public sendPlayerInput(direction: Vector2) {
         if (this.socket.readyState === WebSocket.OPEN) {
+            const message: PlayerInputMessage = {
+                type: 'playerInput',
+                payload: { direction },
+            };
             this.socket.send(JSON.stringify(message));
-        } else {
-            console.error('WebSocket is not open. Ready state:', this.socket.readyState);
         }
     }
 }
